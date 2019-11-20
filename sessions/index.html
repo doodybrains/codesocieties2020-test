@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="sessions.css">
+  </head>
+  <body>
+    <h1>Code Societies 2020</h1>
+    <p>all sessions can be found on this page</p>
+
+    <div id="session-blocks">
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      let sessions = [];
+      const sessionWrapper = document.getElementById("session-blocks");
+
+      const axiosArena = axios.create({
+        baseURL: "https://api.are.na/v2/",
+      });
+
+      axiosArena.defaults.headers.Authorization = 'Bearer ---' ;
+      axiosArena.get("channels/code-societies-2020-sessions").then(response => {
+        if (response.data && response.data.contents.length > 1) {
+          createSessions(response.data.contents);
+        }
+      });
+
+      function createSessions(allSessionsData) {
+        for (let i=0; i<allSessionsData.length; i++) {
+          if (allSessionsData[i].slug) {
+            axiosArena.get(`channels/${allSessionsData[i].slug}`).then(response => {
+              if (response.data && response.data.contents.length > 1) {
+                //create session block
+                const sessionBlock = document.createElement("div");
+                sessionBlock.className = "session-block";
+
+                const title = document.createElement("h2");
+                title.innerHTML = allSessionsData[i].title;
+                sessionBlock.appendChild(title);
+
+                document.body.appendChild(sessionBlock);
+                createSession(response.data.contents, sessionBlock);
+              }
+            });
+          }
+
+        }
+      }
+
+      function createSession(sessionData, sessionBlock) {
+        console.log(sessionData);
+        for (let i=0; i<sessionData.length; i++) {
+          //create block
+          const block = document.createElement("div");
+          block.className = "block";
+
+          //create title
+          if (sessionData[i].title) {
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = sessionData[i].title;
+            block.appendChild(title);
+          }
+
+          //create text
+          if (sessionData[i].class === "Text") {
+            const text = document.createElement("div");
+            text.className = "text";
+            text.innerHTML = sessionData[i].content;
+            block.appendChild(text);
+          }
+
+          //create image
+          if (sessionData[i].image && sessionData[i].image) {
+            const image = document.createElement("img");
+            image.className = "image";
+            image.src = sessionData[i].image.square.url;
+            block.appendChild(image);
+          }
+
+
+
+          sessionBlock.appendChild(block);
+          sessionWrapper.appendChild(sessionBlock);
+        }
+      }
+    </script>
+  </body>
+</html>

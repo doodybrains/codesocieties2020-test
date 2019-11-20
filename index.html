@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="all.css">
+  </head>
+  <body>
+    <h1>Code Societies 2020</h1>
+    <p>School for Poetic Computation(SFPC)’s winter intensive is an introduction to re-introducing yourselves to computers. How do different platforms and processes—including algorithms, surveillance, social media, infrastructure, and interface—yield distinct modes of seeing, thinking, feeling, and reinforce existing systems of power? We will examine how code and societies shape and are shaped by each other by building new codes made of the the digital, the social, and the ritual, on a foundation of shared experience and a commitment to learning with care together. Code Societies is about redrawing the divisions that make us and unmake us. We’ll begin by challenging the division between those who code software and those who are coded by it.</p>
+
+    <p>No coding experience necessary: This session centers the learning experience of beginner programmers. We will argue that everyone who interacts with computers has—in important ways—always already been programming them.</p>
+
+    <p>Through a balanced, interwoven study of critical theory and hands-on coding workshops, students will develop several small scores or sketch pieces online, on screens, performed, or installed. We’ll cover foundational methods of coding with Python, coding on the web, navigating the command line, and working with zines as a technology. The classes are held in the evenings and are designed to engage with code, and the ways code acts on our bodies and networks, equally as subject and as medium. Code Societies is an invitation to use code to choreograph new ways of being with each other within the unique learning environment of SFPC.</p>
+
+    <p>We will work together to create boundaries that make it easier for everyone involved to feel as safe and comfortable as possible throughout the session. SFPC is a school organized by people who are committed to making space for people who exist at the intersections of oppressed identities, including but not limited to, those who are queer, trans, people of color, disabled, deaf, or hard of hearing. Code Societies studies the very systems that create barriers to technology and learning. The process of ideological confrontation can sometimes feel uncomfortable. We understand safety is relative and in constant negotiation. We also distinguish safety from discomfort, as there is no such thing as a never uncomfortable space.</p>
+
+    <div id="orientation-blocks">
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      let orientation = [];
+      const orientationWrapper = document.getElementById("orientation-blocks");
+
+      const axiosArena = axios.create({
+        baseURL: "https://api.are.na/v2/",
+      });
+
+      axiosArena.defaults.headers.Authorization = 'Bearer ---' ;
+      axiosArena.get("channels/code-societies-2020-orientation").then(response => {
+        console.log(response);
+        if (response.data && response.data.contents.length > 1) {
+          createOrientation(response.data.contents);
+        }
+      });
+      
+      function createOrientation(orientationData) {
+        for (let i=0; i<orientationData.length; i++) {
+          //create block
+          const block = document.createElement("div");
+          block.className = "block";
+
+          //create title
+          if (orientationData[i].title) {
+            const title = document.createElement("div");
+            title.className = "title";
+            title.innerHTML = orientationData[i].title;
+            block.appendChild(title);
+          }
+
+          //create text
+          if (orientationData[i].class === "Text") {
+            const text = document.createElement("div");
+            text.className = "text";
+            text.innerHTML = orientationData[i].content;
+            block.appendChild(text);
+          }
+
+          //create image
+          if (orientationData[i].image && orientationData[i].image) {
+            const image = document.createElement("img");
+            image.className = "image";
+            image.src = orientationData[i].image.square.url;
+            block.appendChild(image);
+          }
+
+
+
+          orientationWrapper.appendChild(block);
+        }
+      }
+    </script>
+  </body>
+</html>

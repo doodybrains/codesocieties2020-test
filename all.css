@@ -1,0 +1,26 @@
+html {
+  box-sizing: border-box;
+}
+body {
+  background: black;
+  color: white;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+#orientation-blocks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.block {
+  display: flex;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 33.33%;
+  margin-bottom: 30px;
+}
